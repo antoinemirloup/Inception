@@ -11,12 +11,25 @@ CYAN = \033[0;96m
 WHITE = \033[0;97m
 CURRENT_DATE	:= $(shell date +"%Y-%m-%d %H:%M:%S")
 
-clean-docker:
-	docker stop $$(docker ps -q) || true
-	docker rm $$(docker ps -a -q) || true
+.PHONY: build-nginx build run clean oui
 
-prune-images:
-	docker image prune -f
+build-nginx:
+	@docker build srcs/requirements/nginx -t nginx
+
+build: build-nginx
+
+run:
+	@docker stop nginx || true
+	@docker rm nginx || true
+	@docker run -d --name nginx -p 8443:8443 nginx
+
+clean:
+	@echo "$(RED)Hop, ça dégage !$(DEF_COLOR)"
+	@docker stop $$(docker ps -q) || true
+	@docker rm $$(docker ps -a -q) || true
+	@docker image prune -f
+
+oui: clean build run
 
 git	:
 	@git add . > /dev/null 2>&1

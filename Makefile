@@ -11,17 +11,26 @@ CYAN = \033[0;96m
 WHITE = \033[0;97m
 CURRENT_DATE	:= $(shell date +"%Y-%m-%d %H:%M:%S")
 
-.PHONY: build-nginx build run clean oui
+.PHONY: build-nginx build-maria build-wordpress build run clean oui
 
 build-nginx:
 	@docker build srcs/requirements/nginx -t nginx
 
-build: build-nginx
+build-maria:
+	@docker build srcs/requirements/mariadb -t mariadb
+
+build-wordpress:
+	@docker build srcs/requirements/wordpress -t wordpress
+
+build: build-nginx build-maria build-wordpress
 
 run:
-	@docker stop nginx || true
-	@docker rm nginx || true
 	@docker run -d --name nginx -p 8443:8443 nginx
+	@docker run -d --name mariadb mariadb
+	@docker run -d --name wordpress -p 9000:9000 wordpress
+	@docker logs nginx
+	@docker logs mariadb
+	@docker logs wordpress
 
 clean:
 	@echo "$(RED)Hop, ça dégage !$(DEF_COLOR)"

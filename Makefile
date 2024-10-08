@@ -40,6 +40,7 @@ run:
 	docker logs wordpress
 
 clean:
+	@docker-compose -f ./srcs/docker-compose.yml down
 	@echo "$(RED)Hop, ça dégage !$(DEF_COLOR)"
 	@docker stop $$(docker ps -q) || true
 	@docker rm $$(docker ps -a -q) || true

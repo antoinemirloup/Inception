@@ -11,7 +11,7 @@ CYAN = \033[0;96m
 WHITE = \033[0;97m
 CURRENT_DATE	:= $(shell date +"%Y-%m-%d %H:%M:%S")
 
-.PHONY: network build-nginx build-maria build-wordpress build run clean oui
+.PHONY: network build-nginx build-maria build-wordpress build run clean git
 
 all:
 	@docker-compose -f ./srcs/docker-compose.yml up --build -d
@@ -40,14 +40,9 @@ run:
 	docker logs wordpress
 
 clean:
-	@docker-compose -f ./srcs/docker-compose.yml down
 	@echo "$(RED)Hop, ça dégage !$(DEF_COLOR)"
-	@docker stop $$(docker ps -q) || true
-	@docker rm $$(docker ps -a -q) || true
+	@docker-compose -f ./srcs/docker-compose.yml down -v
 	@docker image prune -f
-	@docker network rm inception
-
-oui: clean build run
 
 git	:
 	@git add . > /dev/null 2>&1

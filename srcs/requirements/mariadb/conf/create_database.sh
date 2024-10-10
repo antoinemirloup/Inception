@@ -2,11 +2,6 @@
 
 /etc/init.d/mariadb start
 
-until mysqladmin ping --silent; do
-    echo "Attente de MariaDB..."
-    sleep 5
-done
-
 mysql -e "CREATE DATABASE IF NOT EXISTS \`${DB_DATABASE}\`;"
 mysql -e "CREATE USER IF NOT EXISTS \`${DB_USER}\`@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
 mysql -e "GRANT ALL PRIVILEGES ON \`${DB_DATABASE}\`.* TO \`${DB_USER}\`@'%' IDENTIFIED BY '${DB_PASSWORD}';"

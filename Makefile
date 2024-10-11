@@ -14,6 +14,10 @@ CURRENT_DATE	:= $(shell date +"%Y-%m-%d %H:%M:%S")
 .PHONY: clean clean-v git
 
 all:
+	@if ! grep -q "127.0.0.1 amirloup.42.fr" /etc/hosts; then \
+		echo >> /etc/hosts "127.0.0.1 amirloup.42.fr"; \
+	fi
+	
 	@docker-compose -f ./srcs/docker-compose.yml up --build -d
 
 clean:

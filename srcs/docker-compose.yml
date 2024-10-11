@@ -6,17 +6,7 @@ networks:
 
 volumes:
   wordpress_data:
-    # driver: local
-    # driver_opts:
-    #   type: none
-    #   o: bind
-    #   device: ./requirements/wordpress/data
   mariadb_data:
-    # driver: local
-    # driver_opts:
-    #   type: none
-    #   o: bind
-    #   device: ./requirements/mariadb/data3
 
 services:
   nginx:

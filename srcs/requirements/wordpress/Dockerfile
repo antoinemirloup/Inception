@@ -13,7 +13,13 @@ RUN	chown -R www-data:www-data /var/www/wordpress
 RUN mkdir -p /run/php
 COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 COPY conf/wp-config.php /var/www/wordpress
+# RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+#     && chmod +x wp-cli.phar \
+#     && mv wp-cli.phar /usr/local/bin/wp
+COPY conf/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 9000
 
-CMD ["php-fpm7.4", "-F"]
+# CMD ["php-fpm7.4", "-F"]
+CMD ["/usr/local/bin/entrypoint.sh"]

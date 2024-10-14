@@ -10,4 +10,6 @@ RUN chown mysql:mysql /var/lib/mysql && chmod -R 777 /var/lib/mysql
 COPY conf/create_database.sh /docker-entrypoint-initdb.d/create_database.sh
 RUN chmod +x /docker-entrypoint-initdb.d/create_database.sh
 
+EXPOSE 3306
+
 CMD ["sh", "./docker-entrypoint-initdb.d/create_database.sh"]

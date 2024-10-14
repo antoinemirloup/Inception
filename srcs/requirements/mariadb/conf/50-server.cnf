@@ -1,7 +1,17 @@
 [mysqld]
-port 			= 3306
-bind_address	= *
-datadir			= /var/lib/mysql
-user			= mysql
-socket			= /run/mysqld/mysqld.sock
-skip-networking = false
+#skip-log-error
+log_error = /var/log/mysql/error.log
+user                    = mysql
+pid-file                = /run/mysqld/mysqld.pid
+basedir                 = /usr
+datadir                 = /var/lib/mysql
+tmpdir                  = /tmp
+lc-messages-dir         = /usr/share/mysql
+lc-messages             = en_US
+skip-external-locking
+expire_logs_days        = 10
+socket  = /run/mysqld/mysqld.sock
+bind_address=0.0.0.0
+port = 3306
+character-set-server  = utf8mb4
+collation-server      = utf8mb4_general_ci

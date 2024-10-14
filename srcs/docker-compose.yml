@@ -43,7 +43,7 @@ services:
     env_file: .env
     volumes:
     - mariadb_data:/var/lib/mysql
-    restart: unless-stopped
+# restart: unless-stopped
     ports:
       - "3306:3306"
 

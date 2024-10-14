@@ -1,22 +1,37 @@
 #!/bin/bash
 
-WP_PATH='/var/www/wordpress'
+chown -R www-data:www-data /var/www/wordpress
 
-# if ! $(wp core is-installed --allow-root --path=$WP_PATH); then
-#     # wp config create --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASSWORD --dbhost=$DB_HOST --allow-root --path=$WP_PATH
+#Attendre que MariaDB soit prêt
+until mysqladmin ping -h mariadb --silent; do
+    echo "En attente de MariaDB..."
+    sleep 5
+done
 
-#     wp core install --url="https://amirloup.42.fr:8443" --title="Inception Project" --admin_user="admin" --admin_password="adminpassword" --admin_email="admin@42.fr" --allow-root --path=$WP_PATH
+sleep 2
 
-#     wp user create editor editor@example.com --role=editor --user_pass=editorpassword --allow-root --path=$WP_PATH
-# fi
+#Vérifier si WordPress est déjà installé
+if ! $(wp core is-installed --allow-root); then
+    # Télécharger WordPress si nécessaire
+    if [ ! -f wp-config.php ]; then
+    wp core download --allow-root
+    fi
 
-# php-fpm7.4 -F
+    # Créer le fichier wp-config.php
+    if [ ! -f wp-config.php ]; then
+        wp config create --dbname=${DB_DATABASE} --dbuser=${DB_USER} --dbpass=${DB_PASSWORD} --dbhost=mariadb --allow-root
+    fi
+    # Installer WordPress
+    wp core install --url="https://localhost:8443/" \
+                    --title="CA marche?" \
+                    --admin_user="amirloup" \
+                    --admin_password="amirloup" \
+                    --admin_email="email@example.com" \
+                    --skip-email \
+                    --allow-root
 
-cd /usr/local/bin
-wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-chmod +x wp-cli.phar
-./wp-cli.phar core download --allow-root --path=$WP_PATH
-./wp-cli.phar config create --dbname=DB_DATABASE --dbuser=DB_USER --dbpass=DB_PASSWORD --dbhost=DB_HOST --allow-root
-./wp-cli.phar core install --url=localhost --title=inception --admin_user=admin --admin_password=admin --admin_email=admin@admin.com --allow-root --path=$WP_PATH
-
-php-fpm7.4 -F
+    # Configurer des options supplémentaires si besoin
+    wp option update blogdescription "Un site WordPress automatisé" --allow-root
+else
+    echo "WordPress est déjà installé."
+fi

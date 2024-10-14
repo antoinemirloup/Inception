@@ -20,9 +20,9 @@ all:
 		echo >> /etc/hosts "127.0.0.1 amirloup.42.fr"; \
 	fi
 	@docker-compose -f ./srcs/docker-compose.yml up --build -d
-#	docker logs nginx
+	docker logs nginx
 	docker logs mariadb
-#	docker logs wordpress
+	docker logs wordpress
 
 clean:
 	@echo "$(RED)Hop, ça dégage !$(DEF_COLOR)"

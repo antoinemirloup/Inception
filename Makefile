@@ -11,7 +11,7 @@ CYAN = \033[0;96m
 WHITE = \033[0;97m
 CURRENT_DATE	:= $(shell date +"%Y-%m-%d %H:%M:%S")
 
-.PHONY: clean fclean git
+.PHONY: clean fclean vclean git
 
 all:
 	@mkdir -p /home/amirloup/data/wordpress
@@ -20,9 +20,6 @@ all:
 		echo >> /etc/hosts "127.0.0.1 amirloup.42.fr"; \
 	fi
 	@docker-compose -f ./srcs/docker-compose.yml up --build -d
-	docker logs nginx
-	docker logs mariadb
-	docker logs wordpress
 
 clean:
 	@echo "$(RED)Hop, ça dégage !$(DEF_COLOR)"
@@ -33,6 +30,9 @@ fclean:
 	@echo "$(RED)Hop, ça dégage !$(DEF_COLOR)"
 	@docker-compose -f ./srcs/docker-compose.yml down -v
 	@docker image prune -f
+
+vclean:
+	docker run --rm -v /home/amirloup/data/wordpress:/wordpress -v /home/amirloup/data/mariadb:/mariadb alpine sh -c "rm -rf /wordpress/* /mariadb/*"
 
 git	:
 	@git add . > /dev/null 2>&1

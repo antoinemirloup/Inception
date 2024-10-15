@@ -22,4 +22,3 @@ WORKDIR /var/www/wordpress
 EXPOSE 9000
 
 CMD ["/bin/bash", "-c", "/usr/local/bin/entrypoint.sh && php-fpm7.4 -F"]
-# CMD ["/bin/bash", "-c", "/usr/local/bin/entrypoint.sh", "php-fpm7.4", "-F"]

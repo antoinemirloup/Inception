@@ -17,15 +17,11 @@ if ! $(wp core is-installed --allow-root); then
     wp core download --allow-root
     fi
 
-    # Créer le fichier wp-config.php
-    if [ ! -f wp-config.php ]; then
-        wp config create --dbname=${DB_DATABASE} --dbuser=${DB_USER} --dbpass=${DB_PASSWORD} --dbhost=mariadb --allow-root
-    fi
     # Installer WordPress
     wp core install --url="https://localhost:8443/" \
                     --title="" \
-                    --admin_user="antoine" \
-                    --admin_password="password" \
+                    --admin_user="$DB_USER" \
+                    --admin_password="$DB_PASSWORD" \
                     --admin_email="email@example.com" \
                     --skip-email \
                     --allow-root
